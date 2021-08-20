@@ -25,29 +25,40 @@ function clearAll() {
     historyExpression = previousOperator = "";
     inputNumber = previousNumber = result = null;
     inputDisplayBox.textContent = historyDisplayBox.textContent = "";
-    operatorSelected = false;
+    operatorSelected = pseudoClearAll = false;
 }
 
-// 
+// Typing input by clicking on digits
 let inputNumber = null;
+let pseudoClearAll = false;
 function addToInput(digit) {
     if (inputNumber === null) {
         inputNumber = "";
     }
     if (digit === "±") {
-        if (inputNumber === "") { // "±" is the first button clicked on
+        if (!inputNumber) { // "±" is the first button clicked on
             digit = "-";
         }    
         else {
-            inputNumber = -inputNumber; // plus-minus symbol will toggle between +ve and -ve
+            inputNumber = -inputNumber; // toggles between +ve and -ve
             updateInputDisplayBox(inputNumber);
             return;
         }
     }
-    if (digit === "%" && inputNumber !== "") {
-        inputNumber = inputNumber / 100;
-        updateInputDisplayBox(inputNumber);
-        return;
+    if (digit === "%") {
+        if (inputNumber) { // a number was entered before "%"" was clicked
+            inputNumber = inputNumber / 100; // instantly shows the decimal representation of (number)%
+            updateInputDisplayBox(inputNumber);
+        }
+        return; // do nothing otherwise: nothing for "%" to operate on
+    }
+    if (previousOperator === "=") {
+        if (!pseudoClearAll) {
+            inputNumber = "";
+            pseudoClearAll = true;
+            result = previousNumber = null; 
+            historyDisplayBox.textContent = "";
+        }
     }
     if (inputNumber.toString().includes(".") && digit === ".") { // number already has a decimal place
         digit = "";
@@ -88,26 +99,49 @@ let currentOperatorArray = {
 let operatorSelected = false;
 let previousNumber = null;
 let previousOperator = "";
-let result = "";
+let result = null;
 function addOperator(operator) {
+    if (!inputNumber) { // do nothing if number has not been inputted beforehand
+        return;
+    }
+
     if (operatorSelected) { // user has already clicked on an operator before
         
-         // show the result of the calculation with the previous operator (which is 
-         // already displayed in history)
-         result = operate(currentOperatorArray[previousOperator], parseFloat(previousNumber), parseFloat(inputNumber));
-         updateInputDisplayBox(result);
+        // two operators clicked in a row, and the second operator is
+        // not "=", so we should ignore it
+        if (isNaN(parseInt(historyExpression.toString().slice(-1)))
+            && operator !== "="
+            && !inputNumber) { 
+            console.log(historyExpression)    
+            return
+        }
 
-         if (operator === "=") { // if "=" chosen, prepare to start a new calculation
+        // show the result of the calculation with the previous operator (which is 
+        // already displayed in history)
+        result = operate(currentOperatorArray[previousOperator], parseFloat(previousNumber), parseFloat(inputNumber));
+        updateInputDisplayBox(result);
+
+        if (operator === "=") { // if "=" chosen, prepare to start a new calculation
             updateHistoryDisplayBox(inputNumber, operator);           
             historyExpression = ""; // make sure history is clear for the next calculation
             operatorSelected = false;
             previousNumber = inputNumber = result;
-            previousOperator = "";
+            previousOperator = "=";
+            pseudoClearAll = false;
             return;
-         }
+        }
 
     }
-    
+    // first operator clicked on is "="
+    if (operator === "=") {
+        updateHistoryDisplayBox(inputNumber, operator);
+        historyExpression = ""; // make sure history is clear for the next calculation
+        inputNumber = parseFloat(inputDisplayBox.textContent);
+        previousOperator = "=";
+        pseudoClearAll = false;
+        return;
+    }
+
     // this is the first operator that user clicked on
     operatorSelected = true;
     previousOperator = operator;
@@ -116,7 +150,7 @@ function addOperator(operator) {
     updateHistoryDisplayBox(inputNumber, operator);
 
     // prepare for next number to be inputted
-    previousNumber = (previousNumber === null) ? inputNumber : result;
+    previousNumber = (!previousNumber) ? inputNumber : result;
     inputNumber = null;
     
 }
