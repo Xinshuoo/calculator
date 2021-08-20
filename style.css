@@ -1,8 +1,8 @@
 :root {
     --calc-width: 45vw;
     --calc-height: calc((var(--calc-width)) * 1.625);
-    --button-height: calc((var(--calc-width) - 140px) / 4);
-    --button-width: calc((var(--calc-width) - 140px) / 4);
+    --button-height: calc((var(--calc-width) - 105px) / 4);
+    --button-width: calc((var(--calc-width) - 105px) / 4);
     --button-font-size: calc(var(--button-width) * 0.5);
 }
 
@@ -33,7 +33,7 @@ body {
     border-radius: 50px;
     color: white;
     height: var(--calc-height);
-    padding: 20px;
+    padding: 10px;
     position: relative;
     width: var(--calc-width);
 }
@@ -55,7 +55,7 @@ body {
 }
 
 .input {
-    font-size: calc(var(--button-font-size) * 1.5);
+    font-size: calc(var(--button-font-size) * 1.48);
     font-weight: 300;
 }
 
@@ -63,7 +63,7 @@ body {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     grid-template-rows: repeat(5, 1fr);
-    grid-gap: 20px;
+    grid-gap: 15px;
     padding: 20px;
 }
 
@@ -71,7 +71,7 @@ button {
     height: var(--button-height);
     width: var(--button-width);
     align-items: center;
-    background: #333;
+    background: rgb(59, 59, 59);
     color: white;
     text-align: center;
     border-color: transparent;
@@ -82,8 +82,12 @@ button {
     justify-content: center;
 }
 
+.function {
+    font-size: calc(var(--button-font-size) * 0.9);
+}
+
 .operator {
-    background: #f1a33c;
+    background: #f19114;
 }
 
 .function {
@@ -96,7 +100,7 @@ button {
     grid-column: 1 / span 2;
     justify-content: flex-start;
     padding-left: 25px;
-    width: calc(var(--button-width) * 2 + 20px);
+    width: calc(var(--button-width) * 2 + 15px);
 }
 
 .footer {
