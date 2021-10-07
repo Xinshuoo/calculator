@@ -1,5 +1,6 @@
 # a simple calculator
-#### Video Demo:  https://www.youtube.com/watch?v=FbNF3T6UmVg
+#### Video:  https://www.youtube.com/watch?v=FbNF3T6UmVg
+#### Try it out: https://xinshuoo.github.io/calculator
 #### Description:
 This is a simple calculator web app built using HTML, CSS and JavaScript.
 - **index.html**: Needless to say, as this is a webpage, HTML is needed to provide the backbone. HTML DOM objects are also accessed in order to make the calculator work.
